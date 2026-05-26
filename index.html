@@ -9,7 +9,7 @@
   :root {
     --cream: #EEF2F5;
     --ink: #0E2030;
-    --warm-gray: #5A7080;
+    --warm-gray: #4A5E6A;
     --accent: #1C3A4A;
     --accent-light: #E07B39;
     --card-bg: #FFFFFF;
@@ -355,6 +355,73 @@
   /* FOOTER */
   footer { background: var(--dark-panel); color: rgba(255,255,255,0.35); text-align: center; padding: 2.5rem; font-size: 0.8rem; letter-spacing: 0.05em; }
 
+  /* SKIP LINK */
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: 1rem;
+    background: var(--accent-light);
+    color: #fff;
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    z-index: 999;
+    border-radius: 2px;
+    transition: top 0.2s;
+  }
+  .skip-link:focus { top: 0.75rem; }
+
+  /* HAMBURGER */
+  .nav-hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+    aria-label: "Toggle menu";
+  }
+  .nav-hamburger span {
+    display: block;
+    width: 24px;
+    height: 2px;
+    background: var(--ink);
+    transition: all 0.3s;
+  }
+  .nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-hamburger.open span:nth-child(2) { opacity: 0; }
+  .nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* MOBILE NAV DRAWER */
+  .nav-mobile {
+    display: none;
+    position: fixed;
+    top: 60px; left: 0; right: 0;
+    background: rgba(238, 242, 245, 0.98);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 99;
+    padding: 1.5rem 5vw;
+    flex-direction: column;
+    gap: 0;
+  }
+  .nav-mobile.open { display: flex; }
+  .nav-mobile a {
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--warm-gray);
+    padding: 0.85rem 0;
+    border-bottom: 1px solid var(--border);
+    transition: color 0.2s;
+  }
+  .nav-mobile a:last-child { border-bottom: none; }
+  .nav-mobile a:hover, .nav-mobile a:focus { color: var(--accent); }
+  .nav-mobile .nav-resume { color: var(--accent-light) !important; }
+
   /* ANIMATIONS */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(24px); }
@@ -363,32 +430,67 @@
   .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.65s ease, transform 0.65s ease; }
   .reveal.visible { opacity: 1; transform: translateY(0); }
 
+  /* FOCUS STYLES */
+  a:focus-visible, button:focus-visible {
+    outline: 2px solid var(--accent-light);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
   /* RESPONSIVE */
   @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
     .hero { grid-template-columns: 1fr; }
     .hero-left { padding: 5rem 8vw 3rem; }
-    .hero-right { padding: 3rem 8vw; flex-direction: row; flex-wrap: wrap; gap: 2rem; }
-    .hero-stat + .hero-stat { margin-top: 0; padding-top: 0; border-top: none; padding-left: 2rem; border-left: 1px solid rgba(255,255,255,0.1); }
+    .hero-right { padding: 3rem 8vw; flex-direction: column; }
+    .hero-stat + .hero-stat { margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,0.1); border-left: none; padding-left: 0; }
     .about-grid, .contact-grid { grid-template-columns: 1fr; }
     .exp-item { grid-template-columns: 1fr; gap: 0.5rem; }
-    .nav-links { display: none; }
+    .highlights-grid { grid-template-columns: 1fr !important; }
     section { padding: 4rem 6vw; }
+    #highlights { padding: 4rem 6vw !important; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-name { font-size: clamp(2.5rem, 12vw, 3.5rem); }
+    .hero-cta { flex-direction: column; }
+    .hero-cta .btn { text-align: center; }
+    .stat-number { font-size: 2.2rem; }
   }
 </style>
 </head>
 <body>
 
+<a href="#main-content" class="skip-link">Skip to main content</a>
+
 <!-- NAV -->
-<nav>
+<nav aria-label="Main navigation">
   <a class="nav-name" href="#">Ericka Wright</a>
-  <ul class="nav-links">
+  <ul class="nav-links" role="list">
     <li><a href="#about">About</a></li>
     <li><a href="#experience">Experience</a></li>
+    <li><a href="#highlights">Highlights</a></li>
     <li><a href="#skills">Skills</a></li>
     <li><a href="#contact">Contact</a></li>
     <li><a href="ericka-wright-resume.pdf" download class="nav-resume">Resume</a></li>
   </ul>
+  <button class="nav-hamburger" aria-label="Toggle navigation menu" aria-expanded="false" aria-controls="mobile-nav">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MOBILE NAV -->
+<div id="mobile-nav" class="nav-mobile" role="navigation" aria-label="Mobile navigation">
+  <a href="#about">About</a>
+  <a href="#experience">Experience</a>
+  <a href="#highlights">Highlights</a>
+  <a href="#skills">Skills</a>
+  <a href="#contact">Contact</a>
+  <a href="ericka-wright-resume.pdf" download class="nav-resume">Resume</a>
+</div>
+
+<main id="main-content">
 
 <!-- HERO -->
 <section class="hero">
@@ -470,7 +572,7 @@
         <ul class="exp-bullets">
           <li>Architected a cross-domain, cross-app tracking strategy for the TurboTax × Credit Karma advertising program across 10+ platforms (Meta, Google, TikTok, etc.), unlocking <span class="exp-highlight">$20M+ in planned joint media spend</span> for FY26.</li>
           <li>Drove technical implementation of LiveRamp/Habu Data Clean Rooms with Snap, TikTok, and Meta; shift to ROAS-based bidding generated <span class="exp-highlight">$13.4M in incremental revenue</span> in 2024 and revealed True CPA to be 24–77% lower than standard reporting.</li>
-          <li>Led a "Pre-Auth Consent" overhaul across 12 teams, increasing user consent rates from <span class="exp-highlight">25% to 86%</span> and significantly expanding the addressable audience for marketing.</li>
+          <li>Led a consent experience overhaul across 12 teams, increasing TurboTax's user consent rates from <span class="exp-highlight">25% to 86%</span> and significantly expanding the addressable audience for marketing.</li>
         </ul>
       </div>
     </div>
@@ -523,6 +625,46 @@
           <li>Built corporate web pages and microsites using HTML, CSS, and JavaScript/jQuery; ran A/B tests via Adobe Target and integrated Marketo lead flows into Salesforce.</li>
         </ul>
       </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- HIGHLIGHTS -->
+<section id="highlights" style="background: var(--dark-panel); padding: 7rem 8vw;">
+  <p class="section-label reveal" style="color: var(--accent-light);">Highlights</p>
+  <h2 class="section-heading reveal" style="color: #fff; max-width: 100%;">Initiatives that <em>moved the needle</em></h2>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; margin-top: 3rem;" class="highlights-grid">
+
+    <div class="reveal" style="border-top: 2px solid var(--accent-light); padding-top: 2rem;">
+      <h3 style="font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #fff; margin-bottom: 1rem; line-height: 1.2;">Isolated Execution Environment</h3>
+      <p style="font-size: 0.95rem; color: rgba(255,255,255,0.65); font-weight: 300; line-height: 1.8;">
+        In 2018 — years before congressional investigators and the FTC began scrutinizing tax prep companies for transmitting sensitive taxpayer data to Meta and other third parties via tracking pixels — I identified the risk and partnered with Security and Engineering to architect an Isolated Execution Environment for TurboTax's post-authentication web experience.
+      </p>
+      <p style="font-size: 0.95rem; color: rgba(255,255,255,0.65); font-weight: 300; line-height: 1.8; margin-top: 1rem;">
+        This sandboxed zone prevented third-party scripts from accessing authenticated customer sessions, ensuring that sensitive financial and tax data — protected under IRS Sec. 7216 and the FTC Act — could not be exposed to advertising pixels. While other tax prep companies were later issued FTC penalty notices with potential civil liability of up to $50,120 per violation, Intuit had already built the technical safeguard. The IEE protected the company from significant regulatory exposure and brand damage before the industry even understood the threat.
+      </p>
+    </div>
+
+    <div class="reveal" style="border-top: 2px solid var(--accent-light); padding-top: 2rem;">
+      <h3 style="font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #fff; margin-bottom: 1rem; line-height: 1.2;">The Cookie Diet</h3>
+      <p style="font-size: 0.95rem; color: rgba(255,255,255,0.65); font-weight: 300; line-height: 1.8;">
+        As browser privacy capabilities — Safari's Intelligent Tracking Prevention (ITP), Firefox's Enhanced Tracking Protection (ETP), and others — began systematically degrading third-party cookie reliability, I recognized early that TurboTax's advertising measurement infrastructure was overexposed to signal loss.
+      </p>
+      <p style="font-size: 0.95rem; color: rgba(255,255,255,0.65); font-weight: 300; line-height: 1.8; margin-top: 1rem;">
+        I created The Cookie Diet — a strategic workstream to reduce reliance on third-party cookies by adopting emerging alternatives: cookie rewriting techniques, server-side tracking, and new privacy-preserving capabilities from key vendors including Google and Meta. The playbook established a phased migration path that ultimately led TurboTax toward Data Clean Rooms — enabling audience matching and measurement without relying on the degraded cookie signal at all.
+      </p>
+    </div>
+
+    <div class="reveal" style="border-top: 2px solid var(--accent-light); padding-top: 2rem;">
+      <h3 style="font-family: 'DM Serif Display', serif; font-size: 1.5rem; color: #fff; margin-bottom: 1rem; line-height: 1.2;">Consent Architecture &amp; the Business Impact Playbook</h3>
+      <p style="font-size: 0.95rem; color: rgba(255,255,255,0.65); font-weight: 300; line-height: 1.8;">
+        I led the onboarding of OneTrust as Intuit's Consent Management Platform, establishing the technical and governance foundation for compliant data collection across TurboTax's web and app properties. Beyond implementation, I drove the testing of a new consent paradigm — rethinking how and when consent was presented to users to maximize both compliance and addressable audience.
+      </p>
+      <p style="font-size: 0.95rem; color: rgba(255,255,255,0.65); font-weight: 300; line-height: 1.8; margin-top: 1rem;">
+        Critically, I created a playbook ensuring that any change to the consent UI or placement was evaluated for business impact before launch — forecasting the effect on addressable audience, media performance, and revenue. This rigor transformed consent from a legal checkbox into a strategic lever, ultimately growing TurboTax's consent rates from 25% to 86% and dramatically expanding the pool of users reachable through paid media.
+      </p>
     </div>
 
   </div>
@@ -716,12 +858,15 @@
   </div>
 </section>
 
+</main>
+
 <!-- FOOTER -->
 <footer>
   <p>© 2026 Ericka Wright · San Diego, CA</p>
 </footer>
 
 <script>
+  // Scroll reveal
   const reveals = document.querySelectorAll('.reveal');
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry, i) => {
@@ -732,6 +877,24 @@
     });
   }, { threshold: 0.1 });
   reveals.forEach(el => observer.observe(el));
+
+  // Hamburger menu
+  const hamburger = document.querySelector('.nav-hamburger');
+  const mobileNav = document.getElementById('mobile-nav');
+  hamburger.addEventListener('click', () => {
+    const isOpen = mobileNav.classList.toggle('open');
+    hamburger.classList.toggle('open', isOpen);
+    hamburger.setAttribute('aria-expanded', isOpen);
+  });
+
+  // Close mobile nav on link click
+  mobileNav.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      hamburger.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', false);
+    });
+  });
 </script>
 </body>
 </html>
